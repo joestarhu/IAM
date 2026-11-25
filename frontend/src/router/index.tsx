@@ -6,6 +6,11 @@ import { Page404 } from "@/components/error-wrap";
 import SidebarLayout from "@/layout/SidebarLayout";
 import SignInLayout from "@/layout/SignInLayout";
 
+import AccountList from "@/biz/account/AccountList";
+
+// Account
+
+
 function requreidAuth() {
     if (!localStorage.getItem(LocalStorageKey.accessToken)) {
         throw redirect("/signin")
@@ -26,10 +31,8 @@ export const router = createBrowserRouter([
         loader: requreidAuth,
         element: <SidebarLayout />,
         children: [
-            {
-                path: "/*",
-                element: <Page404 />
-            }
+            { path: "/account", element: <AccountList /> },
+            { path: "/*", element: <Page404 /> },
         ]
     },
     {
