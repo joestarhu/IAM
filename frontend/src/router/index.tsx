@@ -1,5 +1,4 @@
 import { createBrowserRouter, redirect } from "react-router";
-
 import { LocalStorageKey } from "@/constants";
 
 import SidebarLayout from "@/layout/SidebarLayout";
@@ -24,12 +23,7 @@ export const router = createBrowserRouter([
         path: "/",
         loader: requreidAuth,
         element: <SidebarLayout />,
-        children: [
-            // {
-            //     path: "/*",
-            //     element: <Page404 />
-            // }
-        ]
+        children: []
     },
     {
         path: "/signin",

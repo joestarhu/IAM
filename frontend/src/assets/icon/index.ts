@@ -1,0 +1,1 @@
+export { default as DingTalkIcon } from "./dingtalk.svg?react"
