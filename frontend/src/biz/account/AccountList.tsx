@@ -18,14 +18,12 @@ import { TableList } from "@/components/table-wrap"
 import { EmptyText } from "@/components/empty-wrap"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
-import { AccountAPI, type ReqAccountList, type RspAccountList } from "@/api/account"
+import { AccountAPI, type ReqAccountList, type RspAccountListItem } from "@/api/account"
 import AccountStatus from "./AccountStatus"
+import AccountDialog from "./AccountDialog"
 
 export default function AccountList() {
     const { t } = useTranslation()
-    const queryClient = useQueryClient()
-    const [searchParams,] = useSearchParams()
-
     const msg = {
         all: t("all"),
         accountStatus: t("accountStatus"),
@@ -45,7 +43,7 @@ export default function AccountList() {
         createdAt: t("createdAt"),
     }
 
-
+    const [searchParams,] = useSearchParams()
     const [nickname, setNickname] = useState(searchParams.get("nickname") ?? '')
     const [debouncedNickname] = useDebounce(nickname, nickname.trim() ? 800 : 0)
     const queryNickname = nickname === '' ? '' : debouncedNickname;
@@ -113,10 +111,10 @@ export default function AccountList() {
         // isLoading,
         // isFetching,
         // error,
-    } = useQuery<PageData<RspAccountList>>({
+    } = useQuery<PageData<RspAccountListItem>>({
         queryKey: ["accounts", { queryNickname, status, pageNum, pageSize }],
 
-        queryFn: async (): Promise<PageData<RspAccountList>> => {
+        queryFn: async (): Promise<PageData<RspAccountListItem>> => {
             const params: ReqAccountList = {}
 
             if (queryNickname) {
@@ -154,6 +152,13 @@ export default function AccountList() {
         )
     }
 
+    const queryClient = useQueryClient()
+    const [statusDialogOpen, setStatusDialogOpen] = useState(false)
+    const [resetPasswordDialogOpen, setResetPasswordDialogOpen] = useState(false)
+    const [accountDialogOpen, setAccountDialogOpen] = useState(false)
+    const [actionData, setActionData] = useState<RspAccountListItem | null>(null)
+
+
 
 
     return (
@@ -167,8 +172,8 @@ export default function AccountList() {
 
                 <div className="ml-auto">
                     <Button size={'lg'} onClick={() => {
-                        // setActionData(null)
-                        // setAccountDialogOpen(true)
+                        setActionData(null)
+                        setAccountDialogOpen(true)
                     }}>
                         <newButtonProps.Icon />
                         {t(newButtonProps.label)}
@@ -290,6 +295,10 @@ export default function AccountList() {
                 </TableList>
             </section>
 
+
+            <AccountDialog open={accountDialogOpen} actionData={actionData} onOpenChange={setAccountDialogOpen}
+                onSuccess={() => { queryClient.invalidateQueries({ queryKey: ["accounts"] }) }}
+            />
 
 
         </div >
