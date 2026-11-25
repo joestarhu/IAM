@@ -38,6 +38,14 @@ async def handle_request_valid_error(req: Request, exc: RequestValidationError) 
     return JSONResponse(status_code=code, content=content)
 
 
+@app.exception_handler(Exception)
+async def handle_exception(req: Request, exc: Exception) -> JSONResponse:
+    """系统异常处理"""
+    code = 500
+    content = APIResponse(code=code, message="服务暂不可用").model_dump()
+    return JSONResponse(status_code=code, content=content)
+
+
 @app.exception_handler(BizError)
 async def handle_biz_error(req: Request, exc: BizError) -> JSONResponse:
     """BizError的全局统一处理"""
