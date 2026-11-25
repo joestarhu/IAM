@@ -11,6 +11,7 @@ dependencies = [
     "psycopg2-binary>=2.9.13",
     "pydantic>=2.14.4",
     "pydantic-settings>=2.16.3",
+    "python-multipart>=0.0.34",
     "really-good-things>=0.2.8",
     "uvicorn>=0.54.0",
 ]
